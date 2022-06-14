@@ -1,0 +1,42 @@
+body {
+  max-width: max-content;
+  margin: auto;
+}
+
+div.navbar-nav{
+  border: 1px solid #DEDEDE;
+  padding: 5px 16px;
+}
+div.navbar{
+  border: 1px solid #DEDEDE;
+  display: flex;
+  justify-content: center;
+  background-color: #FCFCFC;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+div.navbar li {
+  float: left;
+}
+
+div.navbar li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+div.navbar li a:hover {
+  background-color: #F0F0F0;
+}
+
+div.center{
+  background-color: #F8F8F8;
+  padding: 5px 16px;
+}

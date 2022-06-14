@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block title %}Actor Filmography{% endblock %}
+
+{% block content %}
+
+<div class="center">
+    
+    <div>
+   	
+    	<h1>{{ actor.name }}</h1>
+    	<h3>Filmography</h3>
+    	{% for item in actor.filmography %}
+	    	<p>Movie Name: {{ item[0] }} <br>
+	    		IBDM Source: <a href="{{ item[1] }}"> {{ item[1] }}  </a> </p>
+    	{% endfor %}
+
+	</div>
+
+</div>
+{% endblock %}
+

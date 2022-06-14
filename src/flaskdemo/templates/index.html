@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> {% block title %}Home page{% endblock %} </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body> 
+
+    <div class="navbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="{{ url_for('movies.home') }}" class="active">Home</a>
+            </li>
+            <li>
+                <a href="{{ url_for('movies.movies') }}" class="nav-link">Movies</a>
+            </li>
+            <li>
+                <a href="{{ url_for('movies.new_item') }}" class="nav-link">Add Movie</a>
+            </li>
+            <li>
+                <a href="{{ url_for('actors.actors') }}" class="nav-link">Actors</a>
+            </li>
+        </ul>
+    </div>
+    <div class="center">
+    {% block content %} 
+        {# =========== Index Section ======== #}
+        <a href="{{ url_for('movies.movies') }}">The whole movie list</a><br>
+        <a href="{{ url_for('actors.actors') }}">Actors List</a><br>
+        <a href="{{ url_for('movies.new_item') }}">Upload a movie</a><br>
+        
+
+        <img src="{{ url_for('static', filename='images/test.jpg') }}" width="70%" height="70%">
+        {% if messg %}
+            <br>Upload error: {{ messg }}
+        {% endif %}
+        
+
+    {% endblock %}
+    </div>
+</body>
+</html>
