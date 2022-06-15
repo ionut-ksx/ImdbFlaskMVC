@@ -6,7 +6,7 @@ from flaskdemo.configuration import config
 import os
 
 # static_url_path="/static", template_folder="./templates"
-app = Flask(__name__, static_url_path="/static/images")
+app = Flask(__name__)
 # app.config["SECRET_KEY"] = "HaHA($(#$$33--"
 
 app.config.update(config().as_dict())

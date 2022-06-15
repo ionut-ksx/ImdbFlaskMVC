@@ -14,8 +14,6 @@
 	           value="{{ request.form['title'] }}"></input>
 	    <br>
 
-	    <label for="genre">Category</label>
-	    <br>
 	    <input type="text" name="genre"
 	           placeholder="Category type"
 	           value="{{ request.form['genre'] }}"></input>
@@ -25,8 +23,39 @@
 	           value="{{ request.form['rating'] }}"></input>
 	    <br>
 	    <input type="text" name="url"
-	           placeholder="Movie url"
+	           placeholder="Movie URL"
 	           value="{{ request.form['url'] }}"></input>
+	    <br>
+	           
+	    <input type="text" name="date_of_scraping"
+	           placeholder="Record Date"
+	           value="{{ request.form['date_of_scraping'] }}"></input>
+	    <br>
+
+	    <input type="text" name="director"
+	           placeholder="Director Name"
+	           value="{{ request.form['director'] }}"></input>
+	    <br>
+
+	    <input type="text" name="release_year"
+	           placeholder="Release Year"
+	           value="{{ request.form['release_year'] }}"></input>
+	    <br>
+
+	    <input type="text" name="top_cast"
+	           placeholder="Top Cast"
+	           value="{{ request.form['top_cast'] }}"></input>
+	    <br>
+
+	    <input type="text" name="image_urls"
+	           placeholder="Image URL"
+	           value="{{ request.form['image_urls'] }}"></input>
+	    <br>
+
+	    <input type="text" name="images"
+	           placeholder="Local Image URL"
+	           value="{{ request.form['images'] }}"></input>
+	    <br>
 	    <br>
 	    <button type="submit">Submit</button>
     </form>

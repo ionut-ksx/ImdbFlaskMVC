@@ -4,29 +4,58 @@
 
 {% block content %}
 
-	<h1>All the fields are mandatory</h1>
+	<h1>Edit Movie ID {{ movie.id }}</h1>
 <div class="content">    
-    <form method="post" action="{{ url_for('movies.edit', id=movie.id) }}">
+    <form method="post" action="{{ url_for('movies.update', id=movie.id) }}">
 	    <label for="title">Title</label>
 	    <br>
 	    <input type="text" name="title"
 	           placeholder="Message title"
-	           value="{{ request.form['title'] }}"></input>
+	           value="{{ movie['title'] }}"></input>
 	    <br>
 
-	    <label for="genre">Category</label>
-	    <br>
 	    <input type="text" name="genre"
 	           placeholder="Category type"
-	           value="{{ request.form['genre'] }}"></input>
+	           value="{{ movie['genre'] }}"></input>
 	    <br>
 	    <input type="text" name="rating"
 	           placeholder="Rating"
-	           value="{{ request.form['rating'] }}"></input>
+	           value="{{ movie['rating'] }}"></input>
 	    <br>
 	    <input type="text" name="url"
-	           placeholder="Movie url"
-	           value="{{ request.form['url'] }}"></input>
+	           placeholder="Movie URL"
+	           value="{{ movie['url'] }}"></input>
+	    <br>
+	           
+	    <input type="text" name="date_of_scraping"
+	           placeholder="Record Date"
+	           value="{{ movie['date_of_scraping'] }}"></input>
+	    <br>
+
+	    <input type="text" name="director"
+	           placeholder="Director Name"
+	           value="{{ movie['director'] }}"></input>
+	    <br>
+
+	    <input type="text" name="release_year"
+	           placeholder="Release Year"
+	           value="{{ movie['release_year'] }}"></input>
+	    <br>
+
+	    <input type="text" name="top_cast"
+	           placeholder="Top Cast"
+	           value="{{ movie['top_cast'] }}"></input>
+	    <br>
+
+	    <input type="text" name="image_urls"
+	           placeholder="Image URL"
+	           value="{{ movie['image_urls'] }}"></input>
+	    <br>
+
+	    <input type="text" name="images"
+	           placeholder="Local Image URL"
+	           value="{{ movie['images'] }}"></input>
+	    <br>
 	    <br>
 	    <button type="submit">Submit</button>
     </form>
