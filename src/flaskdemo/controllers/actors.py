@@ -6,8 +6,6 @@ actors_blueprint = Blueprint("actors", __name__)
 from flaskdemo.app import app, db
 from flaskdemo.models.actors import Actor
 
-actors_blueprint = Blueprint("actors", __name__)
-
 
 @actors_blueprint.route("/", methods=["GET", "POST"])
 def home():

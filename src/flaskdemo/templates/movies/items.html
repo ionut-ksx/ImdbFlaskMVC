@@ -18,10 +18,11 @@
 	        	<a class="button-next" href="{{ url_for('movies.movies', page=current_page + 1, items=items_per_page) }}">Next</a></li>
 	</ul>
 </div>
+	{{ mess }}
     {% for movie in movies %}
     <div class="center">
     	<ul id="movies">
-	        <li class="movie-item"> <a href="{{ movie.id }}">{{ movie.title }}</a></li>
+	        <li class="movie-item"> {{movie.id}} <a href="{{ movie.id }}">{{ movie.title }}</a></li>
 	        {% set imgfile = "images/" + movie.images[1:-1] %}
 	        <img src="{{ url_for('static', filename=imgfile) }}" alt="idmb movie image" class='center'>
 	        <hr>

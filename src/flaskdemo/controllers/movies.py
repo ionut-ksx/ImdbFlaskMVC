@@ -14,27 +14,33 @@ def index():
     return render_template("index.html")
 
 
-@movies_blueprint.route("/movies/", defaults={"page_nr": 1})
-@movies_blueprint.route("/movies/page=<int:page_nr>&items=<int:item_nr>", methods=["GET", "POST"])
-def movies(page_nr):
+@movies_blueprint.route("/movies/")
+# @movies_blueprint.route("/movies/page=<int:page_nr>&items=<int:item_nr>", methods=["GET", "POST"]) -- for me
+def movies():
     # get all entrance from DB
-    all_movies = Movie.query.all()
-    items_per_page = request.args.get("items", 5, type=int)
-    current_page = request.args.get("page", 1, type=int)
-    page_nr = current_page
+    all_movies = Movie.query.order_by(Movie.id).all()
 
-    if page_nr == 1:
-        page_possition = 0
-    elif page_nr > 1 and page_nr <= len(all_movies) // items_per_page:
-        page_possition = items_per_page * (page_nr - 1)
-    else:
-        page_possition = 0
+    per_page = request.args.get("items", 5, type=int)
+    current_page = request.args.get("page", 1, type=int)
+
+    movie_count = len(all_movies)
+
+    # if current_page == 1:
+    #     position = 0
+    # elif current_page > 1 and current_page <= len(all_movies) // per_page:
+    #     position = per_page * (current_page - 1)
+    # else:
+    #     position = 0
+
+    start = per_page * (current_page - 1)
+    end = min(start + per_page, movie_count)
+    movies = all_movies[start:end]
+    mess = ""
+    if len(movies) == 0:
+        mess = "Error message, no more items"
 
     return render_template(
-        "movies/items.html",
-        movies=all_movies[page_possition : page_possition + items_per_page],
-        current_page=current_page,
-        items_per_page=items_per_page,
+        "movies/items.html", movies=movies, current_page=current_page, items_per_page=per_page, mess=mess
     )
 
 
