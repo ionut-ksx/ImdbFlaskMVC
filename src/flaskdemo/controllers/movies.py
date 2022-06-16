@@ -41,40 +41,20 @@ def movies(page_nr):
 @movies_blueprint.route("/movies/new", methods=["GET", "POST"])
 def new_item():
     movie = Movie()
-    if request.method == "POST":
-        title = request.form.get("title")
-        genre = request.form.get("genre")
-        rating = request.form.get("rating")
-        url = request.form.get("url")
-        date_of_scraping = request.form.get("date_of_scraping")
-        director = request.form.get("director")
-        release_year = request.form.get("release_year")
-        top_cast = request.form.get("top_cast")
-        image_urls = request.form.get("image_urls")
-        images = request.form.get("images")
 
-        messg = ""
-        if not title:
-            messg = "Title is required!"
-        elif not genre:
-            messg = "Category type is required!"
-        elif not rating:
-            messg = "Rating is required!"
-        elif not url:
-            messg = "Movie url is required!"
-        elif not date_of_scraping:
-            messg = "Record date is required!"
-        elif not director:
-            messg = "Director name is required"
-        elif not release_year:
-            messg = "Release year is required"
-        elif not top_cast:
-            messg = "Top cast movies is required"
-        elif not image_urls:
-            messg = "Image URL is required"
-        elif not images:
-            messg = "Local Image is required"
-        else:
+    if request.method == "POST":
+        try:
+            title = request.form.get("title")
+            genre = request.form.get("genre")
+            rating = request.form.get("rating")
+            url = request.form.get("url")
+            date_of_scraping = request.form.get("date_of_scraping")
+            director = request.form.get("director")
+            release_year = request.form.get("release_year")
+            top_cast = request.form.get("top_cast")
+            image_urls = request.form.get("image_urls")
+            images = request.form.get("images")
+
             movie.title = title
             movie.genre = genre
             movie.rating = rating
@@ -85,12 +65,13 @@ def new_item():
             movie.top_cast = top_cast
             movie.image_urls = image_urls
             movie.images = images
-
+        except AssertionError as err:
+            return render_template("/movies/new.html", err=err)
+        else:
             db.session.add(movie)
             db.session.flush()
             db.session.commit()
-
-        return render_template("index.html", messg=messg)
+            return render_template("index.html")
 
     return render_template("movies/new.html", new_movie=movie)
 
@@ -104,36 +85,36 @@ def show(id):
 @movies_blueprint.route("/movies/<int:id>", methods=["POST"])
 def update(id):
     item = Movie.query.get(id)
+    try:
+        title = request.form.get("title")
+        genre = request.form.get("genre")
+        rating = request.form.get("rating")
+        url = request.form.get("url")
+        date_of_scraping = request.form.get("date_of_scraping")
+        director = request.form.get("director")
+        release_year = request.form.get("release_year")
+        top_cast = request.form.get("top_cast")
+        image_urls = request.form.get("image_urls")
+        images = request.form.get("images")
 
-    title = request.form.get("title")
-    genre = request.form.get("genre")
-    rating = request.form.get("rating")
-    url = request.form.get("url")
-    date_of_scraping = request.form.get("date_of_scraping")
-    director = request.form.get("director")
-    release_year = request.form.get("release_year")
-    top_cast = request.form.get("top_cast")
-    image_urls = request.form.get("image_urls")
-    images = request.form.get("images")
+        item.title = title
+        item.genre = genre
+        item.rating = rating
+        item.url = url
+        item.date_of_scraping = date_of_scraping
+        item.director = director
+        item.release_year = release_year
+        item.top_cast = top_cast
+        item.image_urls = image_urls
+        item.images = images
+    except AssertionError as err:
+        return render_template("/movies/edit.html", movie=item, err=err)
+        # return redirect(url_for("movies.edit", id=item.id, err=err))
+    else:
+        db.session.flush()
+        db.session.commit()
 
-    messg = ""
-
-    item.title = title
-    item.genre = genre
-    item.rating = rating
-    item.url = url
-    item.date_of_scraping = date_of_scraping
-    item.director = director
-    item.release_year = release_year
-    item.top_cast = top_cast
-    item.image_urls = image_urls
-    item.images = images
-
-    ipdb.set_trace()
-    db.session.flush()
-    db.session.commit()
-
-    return redirect(url_for("movies.show", id=item.id))
+        return redirect(url_for("movies.show", id=item.id))
     # movie_url = "/movies/" + str(id) + "show.html"
     # return redirect(url_for("movies.edit", id=item.id))
 

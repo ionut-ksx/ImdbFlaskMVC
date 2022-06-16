@@ -5,6 +5,11 @@
 {% block content %}
 
 	<h1>Edit Movie ID {{ movie.id }}</h1>
+	<span style="color:red">
+		{% if err %}
+			{{ err }}
+		{% endif %}
+	</span>
 <div class="content">    
     <form method="post" action="{{ url_for('movies.update', id=movie.id) }}">
 	    <label for="title">Title</label>

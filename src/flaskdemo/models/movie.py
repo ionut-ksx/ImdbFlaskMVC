@@ -19,6 +19,46 @@ class Movie(db.Model):
     image_urls = Column(String(255), nullable=True)
     images = Column(String(100), nullable=True)
 
+    def __repr__(self):
+        return "<Movie id=%s> %s %s" % (self.id, self.title, self.url)
+
+    @validates(
+        "genre",
+        "date_of_scraping",
+        "director",
+        "rating",
+        "release_year",
+        "title",
+        "top_cast",
+        "url",
+        "image_urls",
+        "images",
+    )
+    def validates_fields(self, keys, values):
+        # ipdb.set_trace()
+        if keys == "title":
+            assert values != "", "Title is missing"
+        if keys == "genre":
+            assert values != "", "Category is required"
+        if keys == "date_of_scraping":
+            assert values != "", "DateTime is required"
+        if keys == "director":
+            assert values != "", "Director name is required"
+        if keys == "rating":
+            assert values != "", "Raiting is required"
+        if keys == "release_year":
+            assert values.isdigit() and len(values) == 4, "Year is required. ie(2022)"
+        if keys == "top_cast":
+            assert values != "", "Top Case data is required"
+        if keys == "url":
+            assert values != "", "Url is required"
+        if keys == "image_urls":
+            assert values != "", "Image URL is required"
+        if keys == "images":
+            assert values.endswith('.jpg"'), "JPG file is required"
+
+        return values
+
     # def __init__(
     #     self, genre, date_of_scraping, director, rating, release_year, title, top_cast, url, image_urls, images
     # ):
@@ -40,15 +80,3 @@ class Movie(db.Model):
 
     # def set_movie(self, *args):
     #     pass
-
-    def __repr__(self):
-        return "<Movie id=%s> %s %s" % (self.id, self.title, self.url)
-
-    @validates("title")
-    def validate_title(self, key, title):
-        assert title, "Title is missing"
-        return title
-
-        # if not title:
-        #     self.errors.append("Title is missing")
-        # return title
