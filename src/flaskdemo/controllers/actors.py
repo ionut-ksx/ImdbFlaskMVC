@@ -16,24 +16,21 @@ def home():
 @actors_blueprint.route("/actors/page=<int:page_nr>&items=<int:item_nr>", methods=["GET", "POST"])
 def actors(page_nr):
     # get all entrance from DB
-    all_actors = Actor.query.all()
-    items_per_page = request.args.get("items", 5, type=int)
+    all_actors = Actor.query.order_by(Actor.id).all()
+    per_page = request.args.get("items", 5, type=int)
     current_page = request.args.get("page", 1, type=int)
-    page_nr = current_page
 
-    if page_nr == 1:
-        page_possition = 0
-    elif page_nr > 1 and page_nr <= len(all_actors) // items_per_page:
-        page_possition = items_per_page * (page_nr - 1)
-    else:
-        page_possition = 0
+    actor_count = len(all_actors)
 
-    return render_template(
-        "actors/items.html",
-        actors=all_actors[page_possition : page_possition + items_per_page],
-        current_page=current_page,
-        items_per_page=items_per_page,
-    )
+    # Calculate how many items to be dispalyed on the page
+    start = per_page * (current_page - 1)
+    end = min(start + per_page, actor_count)
+    actors = all_actors[start:end]
+    mess = ""
+    if len(actors) == 0:
+        mess = "Warning message: no more actors"
+
+    return render_template("actors/items.html", actors=actors, current_page=current_page, per_page=per_page, mess=mess)
 
 
 def to_list(dbstring):

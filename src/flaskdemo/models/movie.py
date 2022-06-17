@@ -62,16 +62,16 @@ class Movie(db.Model):
     # def __init__(
     #     self, genre, date_of_scraping, director, rating, release_year, title, top_cast, url, image_urls, images
     # ):
-    #     self._genre = genre
-    #     self._date_of_scraping = date_of_scraping
-    #     self._date_of_scraping = director
-    #     self._rating = rating
-    #     self._release_year = release_year
-    #     self._title = title
+    #     self.genre = genre
+    #     self.date_of_scraping = date_of_scraping
+    #     self.date_of_scraping = director
+    #     self.rating = rating
+    #     self.release_year = release_year
+    #     self.title = title
     #     if top_cast == None:
-    #         self._top_cast = []
+    #         self.top_cast = []
     #     else:
-    #         self._top_cast = top_cast
+    #         self.top_cast = top_cast
     #     self.url = url
     #     self.image_urls = image_urls
     #     self.images = images

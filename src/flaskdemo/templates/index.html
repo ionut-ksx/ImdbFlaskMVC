@@ -22,6 +22,9 @@
             <li>
                 <a href="{{ url_for('actors.actors') }}" class="nav-link">Actors</a>
             </li>
+            <li>
+               <a href="{{ url_for('movies.upload') }}" class="nav-link">Upload JOSN</a>
+            </li>
         </ul>
     </div>
     <div class="center">
@@ -29,7 +32,8 @@
         {# =========== Index Section ======== #}
         <a href="{{ url_for('movies.movies') }}">The whole movie list</a><br>
         <a href="{{ url_for('actors.actors') }}">Actors List</a><br>
-        <a href="{{ url_for('movies.new_item') }}">Upload a movie</a><br>
+        <a href="{{ url_for('movies.new_item') }}">Add Movie</a><br>
+        <a href="{{ url_for('movies.upload') }}">Upload JSON</a><br>
         
 
         <img src="{{ url_for('static', filename='images/test.jpg') }}" width="70%" height="70%">

@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block title %}Load a file{% endblock %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{% block content %}
+	<h1>Upload new File</h1>
+	    <form method="post" enctype="multipart/form-data" action="{{ url_for('movies.upload') }}">
+	      <input type="file" name="file">
+	      <input type="submit" value="Upload">
+	    </form>
+
+{% endblock %}

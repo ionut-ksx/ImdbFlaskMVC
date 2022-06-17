@@ -1,9 +1,12 @@
 from flask import Flask, Blueprint, jsonify, render_template, url_for, request, redirect, flash
+from werkzeug.utils import secure_filename
+import os
 import ipdb
+import json
 
 movies_blueprint = Blueprint("movies", __name__)
 
-from flaskdemo.app import app, db
+from flaskdemo.app import app, db, ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 from flaskdemo.models.movie import Movie
 
 movies_blueprint = Blueprint("movies", __name__)
@@ -14,8 +17,11 @@ def index():
     return render_template("index.html")
 
 
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @movies_blueprint.route("/movies/")
-# @movies_blueprint.route("/movies/page=<int:page_nr>&items=<int:item_nr>", methods=["GET", "POST"]) -- for me
 def movies():
     # get all entrance from DB
     all_movies = Movie.query.order_by(Movie.id).all()
@@ -25,13 +31,7 @@ def movies():
 
     movie_count = len(all_movies)
 
-    # if current_page == 1:
-    #     position = 0
-    # elif current_page > 1 and current_page <= len(all_movies) // per_page:
-    #     position = per_page * (current_page - 1)
-    # else:
-    #     position = 0
-
+    # Calculate how many items to be dispalyed on the page
     start = per_page * (current_page - 1)
     end = min(start + per_page, movie_count)
     movies = all_movies[start:end]
@@ -129,3 +129,42 @@ def update(id):
 def edit(id):
     item = Movie.query.get(id)
     return render_template("/movies/edit.html", movie=item)
+
+
+@movies_blueprint.route("/movies/upload")
+def upload_page():
+    return render_template("/movies/upload.html")
+
+
+# delete from movies where genre is null
+@movies_blueprint.route("/movies/upload", methods=["POST"])
+def upload():
+
+    # check if the post request has the file part
+    if "file" not in request.files or request.files["file"].filename == "":
+        flash("No file part")
+        # return redirect(request.url)
+        # return redirect("/movies/upload")
+        return render_template("/movies/upload.html")
+    file = request.files["file"]
+
+    if file and allowed_file(file.filename):
+        for row in file.readlines():
+            temp = json.loads(row)
+            movie = Movie()
+            movie.title = temp.get("title")
+            db.session.add(movie)
+        db.session.flush()
+        db.session.commit()
+
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        print(file)
+        # ipdb.set_trace()
+        flash("Successfully uploaded file")
+    else:
+        flash("Unallowed file type")
+
+    # return redirect(url_for("movies.upload"))
+
+    return render_template("/movies/upload.html")
