@@ -4,8 +4,28 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages() %}
+<div class=flashes>
+    {% if messages %}
+      <ul >
+	      {% for message in messages %}
+	        <li>{{ message }}</li>
+	      {% endfor %}
+      </ul>
+	{% endif %}
+</div>
+{% endwith %}
+
+<span style="color:red">
+	{% if err %}
+		{{ err }}
+	{% endif %}
+</span>
+
 <div class="center">
-    
+    <div class="show">
+	    <span> <a href="{{ url_for('actors.edit', id=actor.id) }}"><i>Edit Actor</i></a></span>
+    <div>
     <div>
    	
     	<h1>{{ actor.name }}</h1>

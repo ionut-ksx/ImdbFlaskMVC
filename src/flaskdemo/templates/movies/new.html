@@ -9,7 +9,7 @@
 		{% if err %} {{ err }} {% endif %}
 	</span>
     
-    <form method="post" action="{{ url_for('movies.new_item') }}">
+    <form method="post" action="{{ url_for('movies.create') }}">
 	    <label for="title">Title</label>
 	    <br>
 	    <input type="text" name="title"

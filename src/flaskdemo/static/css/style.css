@@ -39,4 +39,19 @@ div.navbar li a:hover {
 div.center{
   background-color: #F8F8F8;
   padding: 5px 16px;
+  overflow-wrap: break-word;
+  margin: auto;
+}
+div.show{
+  padding: 10px 160px;
+  overflow-wrap: break-word;
+}
+div.show li{
+  margin-left: 50px;
+}
+
+div.flashes{
+  text-align: center;
+  margin: auto;
+  background-color: lightseagreen;
 }

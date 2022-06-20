@@ -11,6 +11,28 @@ from flaskdemo.models.movie import Movie
 
 movies_blueprint = Blueprint("movies", __name__)
 
+headers = [
+    "genre",
+    "date_of_scraping",
+    "director",
+    "rating",
+    "release_year",
+    "title",
+    "top_cast",
+    "url",
+    "image_urls",
+    "images",
+]
+
+
+def to_list(dbstring):
+    dbstring = dbstring.strip("'][")
+    li = dbstring.split(", ")
+    result = []
+    for item in li:
+        result.append((item[1:-1]))
+    return result
+
 
 @movies_blueprint.route("/", methods=["GET", "POST"])
 def index():
@@ -45,7 +67,7 @@ def movies():
 
 
 @movies_blueprint.route("/movies/new", methods=["GET", "POST"])
-def new_item():
+def create():
     movie = Movie()
 
     if request.method == "POST":
@@ -85,7 +107,20 @@ def new_item():
 @movies_blueprint.route("/movies/<int:id>")
 def show(id):
     item = Movie.query.get(id)
-    return render_template("/movies/show.html", movies=item)
+    movie = {
+        "id": item.id,
+        "title": item.title,
+        "genre": to_list(item.genre),
+        "date_of_scraping": item.date_of_scraping,
+        "director": item.director,
+        "rating": item.rating,
+        "release_year": item.release_year,
+        "top_cast": to_list(item.top_cast),
+        "url": item.url,
+        "image_urls": item.image_urls,
+        "images": item.images,
+    }
+    return render_template("/movies/show.html", movie=movie)
 
 
 @movies_blueprint.route("/movies/<int:id>", methods=["POST"])
@@ -114,12 +149,13 @@ def update(id):
         item.image_urls = image_urls
         item.images = images
     except AssertionError as err:
+        flash("Your attention is required")
         return render_template("/movies/edit.html", movie=item, err=err)
         # return redirect(url_for("movies.edit", id=item.id, err=err))
     else:
         db.session.flush()
         db.session.commit()
-
+        flash("Successfully registered!")
         return redirect(url_for("movies.show", id=item.id))
     # movie_url = "/movies/" + str(id) + "show.html"
     # return redirect(url_for("movies.edit", id=item.id))
@@ -139,9 +175,10 @@ def upload_page():
 # delete from movies where genre is null
 @movies_blueprint.route("/movies/upload", methods=["POST"])
 def upload():
-
+    # messg = ""
     # check if the post request has the file part
     if "file" not in request.files or request.files["file"].filename == "":
+        # messg = "No file part"
         flash("No file part")
         # return redirect(request.url)
         # return redirect("/movies/upload")
@@ -152,18 +189,28 @@ def upload():
         for row in file.readlines():
             temp = json.loads(row)
             movie = Movie()
-            movie.title = temp.get("title")
+            for item in headers:
+                try:
+                    setattr(movie, item, str(temp.get(str(item))))
+                    # ipdb.set_trace()
+                    # movie.title = temp.get("title")
+                except AssertionError as err:
+                    flash("Attention is required!")
+                    return render_template("/movies/upload.html", err=err)
+
             db.session.add(movie)
         db.session.flush()
         db.session.commit()
 
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        # filename = secure_filename(file.filename)
+        # file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         print(file)
         # ipdb.set_trace()
-        flash("Successfully uploaded file")
+        flash("File uploaded successfully!")
+        # messg = "Successfully uploaded file"
     else:
         flash("Unallowed file type")
+        # messg = "Unallowed file type"
 
     # return redirect(url_for("movies.upload"))
 

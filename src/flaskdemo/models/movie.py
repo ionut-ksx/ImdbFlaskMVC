@@ -19,9 +19,6 @@ class Movie(db.Model):
     image_urls = Column(String(255), nullable=True)
     images = Column(String(100), nullable=True)
 
-    def __repr__(self):
-        return "<Movie id=%s> %s %s" % (self.id, self.title, self.url)
-
     @validates(
         "genre",
         "date_of_scraping",
@@ -47,7 +44,7 @@ class Movie(db.Model):
         if keys == "rating":
             assert values != "", "Raiting is required"
         if keys == "release_year":
-            assert values.isdigit() and len(values) == 4, "Year is required. ie(2022)"
+            assert values != "", "Year is required. ie(2022)"
         if keys == "top_cast":
             assert values != "", "Top Case data is required"
         if keys == "url":
@@ -55,28 +52,52 @@ class Movie(db.Model):
         if keys == "image_urls":
             assert values != "", "Image URL is required"
         if keys == "images":
-            assert values.endswith('.jpg"'), "JPG file is required"
+            assert values != "", "JPG file is required"
 
         return values
 
-    # def __init__(
-    #     self, genre, date_of_scraping, director, rating, release_year, title, top_cast, url, image_urls, images
-    # ):
-    #     self.genre = genre
-    #     self.date_of_scraping = date_of_scraping
-    #     self.date_of_scraping = director
-    #     self.rating = rating
-    #     self.release_year = release_year
-    #     self.title = title
-    #     if top_cast == None:
-    #         self.top_cast = []
-    #     else:
-    #         self.top_cast = top_cast
-    #     self.url = url
-    #     self.image_urls = image_urls
-    #     self.images = images
-    #     super(Movie, self).__init__()
-    #     self.errors = []
+    def __repr__(self):
+        return f"""
+            {self.id},
+            {self.title},
+            {self.url},
+            {self.rating},
+            {self.genre},
+            {self.date_of_scraping},
+            {self.release_year},
+            {self.top_cast},
+        """
 
-    # def set_movie(self, *args):
-    #     pass
+
+# def __init__(
+#     self,
+#     genre=None,
+#     date_of_scraping=None,
+#     director=None,
+#     rating=None,
+#     release_year=None,
+#     title=None,
+#     top_cast=None,
+#     url=None,
+#     image_urls=None,
+#     images=None,
+# ):
+#     self.genre = genre
+#     self.date_of_scraping = date_of_scraping
+#     self.director = director
+#     self.rating = rating
+#     self.release_year = release_year
+#     self.title = title
+#     if top_cast == None:
+#         self.top_cast = []
+#     else:
+#         self.top_cast = top_cast
+#     self.url = url
+#     self.image_urls = image_urls
+#     self.images = images
+
+# def __setitem__(self, key, value):
+#     setattr(self, key, value)
+
+# def __getitem__(self, key):
+#     return getattr(self, key)

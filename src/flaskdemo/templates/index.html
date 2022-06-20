@@ -13,14 +13,18 @@
             <li class="nav-item">
                 <a href="{{ url_for('movies.index') }}" class="active">Home</a>
             </li>
+            <ul class="dropdown">
             <li>
                 <a href="{{ url_for('movies.movies') }}" class="nav-link">Movies</a>
             </li>
             <li>
-                <a href="{{ url_for('movies.new_item') }}" class="nav-link">Add Movie</a>
+                <a href="{{ url_for('movies.create') }}" class="nav-link">Add Movie</a>
             </li>
             <li>
                 <a href="{{ url_for('actors.actors') }}" class="nav-link">Actors</a>
+            </li>
+            <li>
+                <a href="{{ url_for('actors.new') }}" class="nav-link">Add Actor</a>
             </li>
             <li>
                <a href="{{ url_for('movies.upload') }}" class="nav-link">Upload JOSN</a>
@@ -31,8 +35,9 @@
     {% block content %} 
         {# =========== Index Section ======== #}
         <a href="{{ url_for('movies.movies') }}">The whole movie list</a><br>
+        <a href="{{ url_for('movies.create') }}">Add Movie</a><br>
         <a href="{{ url_for('actors.actors') }}">Actors List</a><br>
-        <a href="{{ url_for('movies.new_item') }}">Add Movie</a><br>
+        <a href="{{ url_for('actors.new') }}">Add Actor</a><br>
         <a href="{{ url_for('movies.upload') }}">Upload JSON</a><br>
         
 
