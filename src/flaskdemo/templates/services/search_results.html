@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+
+{# set active_page = 'home' #}
+
+{% block title %}IMDB Movies List{% endblock %}
+
+{% block content %}
+<div class="navbar-nav">
+	<ul>
+	    {% if current_page == 1 %}
+	        <li style="float:left">
+	        	<a  href="#">Previous</a></li>
+	    {% else %}
+	        <li style="float:left">
+	        	<a href="{{ url_for('services.search', q=search_string, page=current_page - 1, items=items_per_page) }}">Previous</a></li>
+	    {% endif %}
+	        <li style="float:right">
+	        	<a class="button-next" href="{{ url_for('services.search', q=search_string, page=current_page + 1, items=items_per_page) }}">Next</a></li>
+	</ul>
+</div>
+
+	{{ mess }}
+<div class="search_content">
+	{% for key, values in results.items() %}
+		{% if key == 'movies' %}
+			{{ key }} 
+			{% for value in values %}
+			<li> {{ value }} </li>
+			{% endfor %}
+		{% endif %}
+		{% if key == 'actors' %}
+			{{ key }} 
+			{% for value in values %}
+			<li> {{ value }} </li>
+			{% endfor %}
+		{% endif %}
+	{% endfor %}
+</div>
+
+{% endblock %}

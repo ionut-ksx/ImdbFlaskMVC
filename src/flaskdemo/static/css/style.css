@@ -55,3 +55,10 @@ div.flashes{
   margin: auto;
   background-color: lightseagreen;
 }
+div.search_content{
+  text-align: center;
+
+}
+div.search_content li{
+  margin: 10px 130px;
+}

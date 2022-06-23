@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, jsonify, render_template, url_for, request, redirect, flash
 from werkzeug.utils import secure_filename
+
 import os
 import ipdb
 import json
@@ -9,7 +10,6 @@ movies_blueprint = Blueprint("movies", __name__)
 from flaskdemo.app import app, db, ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 from flaskdemo.models.movie import Movie
 
-movies_blueprint = Blueprint("movies", __name__)
 
 headers = [
     "genre",
@@ -30,7 +30,12 @@ def to_list(dbstring):
     li = dbstring.split(", ")
     result = []
     for item in li:
-        result.append((item[1:-1]))
+        if item.startswith("\"['"):
+            result.append((item[3:-1]))
+        elif item.endswith("']\""):
+            result.append((item[1:-3]))
+        else:
+            result.append((item[1:-1]))
     return result
 
 
@@ -45,7 +50,7 @@ def allowed_file(filename):
 
 @movies_blueprint.route("/movies/")
 def movies():
-    # get all entrance from DB
+    # get all entries from DB
     all_movies = Movie.query.order_by(Movie.id).all()
 
     per_page = request.args.get("items", 5, type=int)
@@ -64,6 +69,40 @@ def movies():
     return render_template(
         "movies/items.html", movies=movies, current_page=current_page, items_per_page=per_page, mess=mess
     )
+
+
+@movies_blueprint.route("/movies/results/")
+def search_item():
+
+    search_string = request.args.get("q")
+
+    try:
+        assert len(search_string) > 1
+        # return redirect(url_for("movies.search"))
+
+    except AssertionError as warning:
+        return redirect(url_for("movies.index"))
+    else:
+        search_result = Movie.query.filter(Movie.title.like("%" + search_string + "%")).all()
+        per_page = request.args.get("items", 5, type=int)
+        current_page = request.args.get("page", 1, type=int)
+
+        movie_count = len(search_result)
+        # Calculate how many items to be dispalyed on the page
+        start = per_page * (current_page - 1)
+        end = min(start + per_page, movie_count)
+        movies = search_result[start:end]
+        mess = ""
+        if len(movies) == 0:
+            mess = "Error message, no more items"
+        return render_template(
+            "movies/results.html",
+            movies=movies,
+            current_page=current_page,
+            items_per_page=per_page,
+            mess=mess,
+            search_string=search_string,
+        )
 
 
 @movies_blueprint.route("/movies/new", methods=["GET", "POST"])
@@ -197,6 +236,8 @@ def upload():
                 except AssertionError as err:
                     flash("Attention is required!")
                     return render_template("/movies/upload.html", err=err)
+            if movie.errors:
+                return render_template("/movies/upload.html", err=movie.errors)
 
             db.session.add(movie)
         db.session.flush()

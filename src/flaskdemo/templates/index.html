@@ -13,13 +13,14 @@
             <li class="nav-item">
                 <a href="{{ url_for('movies.index') }}" class="active">Home</a>
             </li>
-            <ul class="dropdown">
             <li>
                 <a href="{{ url_for('movies.movies') }}" class="nav-link">Movies</a>
             </li>
             <li>
                 <a href="{{ url_for('movies.create') }}" class="nav-link">Add Movie</a>
             </li>
+               
+
             <li>
                 <a href="{{ url_for('actors.actors') }}" class="nav-link">Actors</a>
             </li>
@@ -27,9 +28,19 @@
                 <a href="{{ url_for('actors.new') }}" class="nav-link">Add Actor</a>
             </li>
             <li>
-               <a href="{{ url_for('movies.upload') }}" class="nav-link">Upload JOSN</a>
+                <a href="{{ url_for('movies.upload') }}" class="nav-link">Upload JOSN</a>
             </li>
+
         </ul>
+    </div>
+
+    <div class="navbar-nav">
+        {#<form method="GET" enctype="multipart/form-data" action="{{ url_for('services.search_item') }}">#}
+        <form method="GET" enctype="multipart/form-data" action="{{ url_for('services.search') }}">
+            <label for="search">Search Movie Name:</label>
+            <input type="search" name="q">
+            <input type="submit" value="submit">
+        </form>
     </div>
     <div class="center">
     {% block content %} 
@@ -38,7 +49,8 @@
         <a href="{{ url_for('movies.create') }}">Add Movie</a><br>
         <a href="{{ url_for('actors.actors') }}">Actors List</a><br>
         <a href="{{ url_for('actors.new') }}">Add Actor</a><br>
-        <a href="{{ url_for('movies.upload') }}">Upload JSON</a><br>
+        <a href="{{ url_for('movies.upload') }}">Upload Movie JSON</a><br>
+        <a href="{{ url_for('actors.upload') }}">Upload Actor JSON</a><br>
         
 
         <img src="{{ url_for('static', filename='images/test.jpg') }}" width="70%" height="70%">

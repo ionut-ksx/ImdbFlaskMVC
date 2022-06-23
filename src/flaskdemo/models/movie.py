@@ -31,41 +31,25 @@ class Movie(db.Model):
         "image_urls",
         "images",
     )
-    def validates_fields(self, keys, values):
-        # ipdb.set_trace()
-        if keys == "title":
-            assert values != "", "Title is missing"
-        if keys == "genre":
-            assert values != "", "Category is required"
-        if keys == "date_of_scraping":
-            assert values != "", "DateTime is required"
-        if keys == "director":
-            assert values != "", "Director name is required"
-        if keys == "rating":
-            assert values != "", "Raiting is required"
-        if keys == "release_year":
-            assert values != "", "Year is required. ie(2022)"
-        if keys == "top_cast":
-            assert values != "", "Top Case data is required"
-        if keys == "url":
-            assert values != "", "Url is required"
-        if keys == "image_urls":
-            assert values != "", "Image URL is required"
-        if keys == "images":
-            assert values != "", "JPG file is required"
+    def validates_fields(self, key, value):
+        if not getattr(self, "errors", None):
+            self.errors = []
 
-        return values
+        if not value:
+            self.errors.append(f"{key} is missing")
+
+        return value
 
     def __repr__(self):
         return f"""
-            {self.id},
-            {self.title},
-            {self.url},
-            {self.rating},
-            {self.genre},
-            {self.date_of_scraping},
-            {self.release_year},
-            {self.top_cast},
+            "id": {self.id},
+            "title": {self.title},
+            "url": {self.url},
+            "rating": {self.rating},
+            "genre": {self.genre},
+            "date_of_scraping": {self.date_of_scraping},
+            "release_year": {self.release_year},
+            "top_cast": {self.top_cast},
         """
 
 

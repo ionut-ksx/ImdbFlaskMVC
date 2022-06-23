@@ -1,12 +1,18 @@
 from flask import Flask, Blueprint, jsonify, render_template, url_for, request, redirect, flash
 import ipdb
+import json
 
 actors_blueprint = Blueprint("actors", __name__)
 
-from flaskdemo.app import app, db
+from flaskdemo.app import app, db, ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 from flaskdemo.models.actors import Actor
 
+
 actor_headers = ["name", "url", "filmography_movie_name", "filmography_url"]
+
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @actors_blueprint.route("/actors/", defaults={"page_nr": 1})
@@ -110,3 +116,41 @@ def update(id):
         flash("Success!")
     # return render_template("/actors/show.html", actor=actor)
     return redirect(url_for("actors.show", id=actor.id))
+
+
+@actors_blueprint.route("/actors/upload")
+def upload_page():
+    return render_template("/actors/upload.html")
+
+
+@actors_blueprint.route("/actors/upload", methods=["POST"])
+def upload():
+    # messg = ""
+    # check if the post request has the file part
+    if "file" not in request.files or request.files["file"].filename == "":
+        flash("No file part")
+        # return redirect("/movies/upload")
+        return render_template("/actors/upload.html")
+
+    file = request.files["file"]
+
+    if file and allowed_file(file.filename):
+        for row in file.readlines():
+            temp = json.loads(row)
+            actor = Actor()
+            for item in actor_headers:
+                try:
+                    setattr(actor, item, str(temp.get(str(item))))
+                except AssertionError as err:
+                    flash("Attention is required!")
+                    return render_template("/actors/upload.html", err=err)
+
+            db.session.add(actor)
+        db.session.flush()
+        db.session.commit()
+
+        flash("File uploaded successfully!")
+    else:
+        flash("Unallowed file type")
+
+    return redirect(url_for("actors.upload_page"))
