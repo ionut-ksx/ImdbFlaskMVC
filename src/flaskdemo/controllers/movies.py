@@ -39,11 +39,6 @@ def to_list(dbstring):
     return result
 
 
-@movies_blueprint.route("/", methods=["GET", "POST"])
-def index():
-    return render_template("index.html")
-
-
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -81,7 +76,7 @@ def search_item():
         # return redirect(url_for("movies.search"))
 
     except AssertionError as warning:
-        return redirect(url_for("movies.index"))
+        return redirect(url_for("home.index"))
     else:
         search_result = Movie.query.filter(Movie.title.like("%" + search_string + "%")).all()
         per_page = request.args.get("items", 5, type=int)
@@ -138,7 +133,7 @@ def create():
             db.session.add(movie)
             db.session.flush()
             db.session.commit()
-            return render_template("index.html")
+            return render_template("home/index.html")
 
     return render_template("movies/new.html", new_movie=movie)
 

@@ -19,11 +19,12 @@ db = SQLAlchemy(app)
 
 from flaskdemo.controllers.movies import movies_blueprint
 from flaskdemo.controllers.actors import actors_blueprint
-from flaskdemo.controllers.services import services_blueprint
+from flaskdemo.controllers.home import home_blueprint
 
 app.register_blueprint(movies_blueprint)
 app.register_blueprint(actors_blueprint)
-app.register_blueprint(services_blueprint)
+app.register_blueprint(home_blueprint)
+
 
 if __name__ == "__main__":
 
